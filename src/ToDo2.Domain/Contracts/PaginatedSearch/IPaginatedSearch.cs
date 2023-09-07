@@ -1,0 +1,16 @@
+﻿using System.Linq.Expressions;
+using ToDo2.Domain.Entities;
+
+namespace ToDo2.Domain.Contracts.PaginatedSearch;
+
+public interface IPaginatedSearch<T> where T : BaseEntity
+{
+    public int Pages { get; set; }
+    public int CapacityItems { get; set; }
+    public string OrdenationBy { get; set; }
+    public string DirectionOfOrdenation { get; set; }
+
+    public void ApplyFilters(ref IQueryable<T> query);
+    public void ApplyOrdenation(ref IQueryable<T> query);
+    public Expression<Func<T, bool>> CreateExpression();
+}

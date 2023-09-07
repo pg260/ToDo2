@@ -10,6 +10,16 @@
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="FluentValidation" Version="11.7.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0-preview.7.23375.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts" />
+    <Folder Include="Services" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ToDo2.Infra\ToDo2.Infra.csproj" />
   </ItemGroup>
 
 </Project>

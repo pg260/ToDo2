@@ -19,7 +19,10 @@ public class TasksMapping : IEntityTypeConfiguration<Tasks>
         builder.Property(c => c.Descricao)
             .HasMaxLength(200);
 
-        builder.Property(c => c.Expiracao);
+        builder.Property(c => c.Concluida)
+            .IsRequired();
+
+        builder.Property(c => c.DataExpiracao);
 
         builder.Property(c => c.CriadoEm)
             .IsRequired();

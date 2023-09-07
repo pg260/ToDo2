@@ -5,7 +5,9 @@ public class Tasks : BaseEntity
     public int UserId { get; set; }
     public string Nome { get; set; } = null!;
     public string? Descricao { get; set; }
-    public DateTime Expiracao { get; set; }
+
+    public bool Concluida { get; set; }
+    public DateTime DataExpiracao { get; set; }
     public DateTime CriadoEm { get; set; }
     public DateTime AtualizadoEm { get; set; }
 
