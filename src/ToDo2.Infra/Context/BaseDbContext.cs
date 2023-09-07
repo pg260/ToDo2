@@ -7,6 +7,9 @@ namespace ToDo2.Infra.Context;
 
 public class BaseDbContext : DbContext, IUnitOfWork
 {
+    public BaseDbContext(DbContextOptions<BaseDbContext> options) : base(options)
+    {}
+
     public DbSet<Users> Users { get; set; } = null!;
     public DbSet<Tasks> Tasks { get; set; } = null!;
 
