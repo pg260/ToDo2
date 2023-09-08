@@ -6,8 +6,8 @@ public class Tasks : BaseEntity
     public string Nome { get; set; } = null!;
     public string? Descricao { get; set; }
 
-    public bool Concluida { get; set; }
-    public DateTime DataExpiracao { get; set; }
+    public bool Concluido { get; set; }
+    public DateTime? DataExpiracao { get; set; }
     public DateTime CriadoEm { get; set; }
     public DateTime AtualizadoEm { get; set; }
 

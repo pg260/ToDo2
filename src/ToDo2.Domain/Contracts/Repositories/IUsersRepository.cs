@@ -5,7 +5,7 @@ namespace ToDo2.Domain.Contracts.Repositories;
 public interface IUsersRepository : IBaseRepository<Users>
 {
     void Create(Users users);
-    void Edit(Users users);
+    void Update(Users users);
     void Remove(Users users);
-    void GetById(Users users);
+    Task<Users?> GetById(int id);
 }

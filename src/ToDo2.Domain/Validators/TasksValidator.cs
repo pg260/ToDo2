@@ -18,7 +18,7 @@ public class TasksValidator : AbstractValidator<Tasks>
             .WithMessage("A descrição não pode ter mais de 200 caracteres.");
 
         RuleFor(c => c.DataExpiracao)
-            .Must((model, expiracao) => expiracao.Date >= DateTime.Today)
+            .Must((model, dataExpiracao) => dataExpiracao.Value.Date >= DateTime.Today)
             .WithMessage("A data de expiração da task não pode ser menor que a data de hoje.");
     }
 }

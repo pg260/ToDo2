@@ -5,7 +5,7 @@ namespace ToDo2.Domain.Contracts.Repositories;
 public interface ITaskRepositories : IBaseRepository<Tasks>
 {
     void Create(Tasks tasks);
-    void Edit(Tasks tasks);
+    void Update(Tasks tasks);
     void Remove(Tasks tasks);
-    void GetById(Tasks tasks);
+    Task<Tasks?> GetById(int id);
 }

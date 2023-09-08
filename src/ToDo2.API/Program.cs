@@ -22,6 +22,10 @@ builder
     .Services
     .AddServices();
 
+builder
+    .Services
+    .CreateAutomapper();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

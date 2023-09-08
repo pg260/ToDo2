@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ToDo2.Domain.Contracts.Repositories;
 using ToDo2.Infra.Context;
+using ToDo2.Infra.Repositories;
 
 namespace ToDo2.Infra;
 
@@ -21,7 +23,8 @@ public static class DependencyInjectionInfra
 
     public static void AddRepositories(this IServiceCollection services)
     {
-        //aplicar injeção de dependencias aqui
+        services.AddScoped<ITaskRepositories, TasksRepository>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
     }
 
     public static void UseMigrations(IServiceProvider services)
