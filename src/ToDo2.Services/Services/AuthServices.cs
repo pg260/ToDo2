@@ -29,7 +29,6 @@ public class AuthServices : BaseService, IAuthServices
         var user = await _usersRepository.FirstOrDefault(c => c.Email == dto.Email);
         if (user == null)
         {
-            Notificator.HandleNotFound();
             Notificator.Handle("Email incorreto.");
             return null;
         }
