@@ -4,6 +4,7 @@ namespace ToDo2.Services.Dtos.Tasks;
 
 public class BuscarTasksDto : PaginatedSearchDto<Domain.Entities.Tasks>
 {
+    public int UserId { get; set; }
     public string? Nome { get; set; } = null;
     public string? Descricao { get; set; } = null;
     public bool? Concluido { get; set; } = null;
@@ -17,6 +18,7 @@ public class BuscarTasksDto : PaginatedSearchDto<Domain.Entities.Tasks>
         if (Concluido != null) query = query.Where(c => c.Concluido == Concluido);
         if (CriadoEm != null) query = query.Where(c => c.CriadoEm >= CriadoEm);
         if (DataExpiracao != null) query = query.Where(c => c.DataExpiracao >= DataExpiracao);
+        query = query.Where(c => c.UserId == UserId);
     }
 
     public override void ApplyOrdenation(ref IQueryable<Domain.Entities.Tasks> query)

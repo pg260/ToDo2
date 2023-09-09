@@ -21,11 +21,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ToDo2.Core\ToDo2.Core.csproj" />
     <ProjectReference Include="..\ToDo2.Domain\ToDo2.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Migrations" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+      <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.9\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

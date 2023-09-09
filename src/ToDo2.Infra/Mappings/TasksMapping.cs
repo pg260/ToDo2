@@ -29,5 +29,11 @@ public class TasksMapping : IEntityTypeConfiguration<Tasks>
 
         builder.Property(c => c.AtualizadoEm)
             .IsRequired();
+        
+        builder.HasOne(c => c.User)
+            .WithMany(t => t.TasksList)
+            .HasForeignKey(t => t.UserId)
+            .HasPrincipalKey(c => c.Id)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

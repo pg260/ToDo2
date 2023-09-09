@@ -15,7 +15,7 @@ public static class DependencyInjection
     public static void ConfigureApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigureDbContext(configuration);
-        
+
         services.AddRepositories();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -26,6 +26,8 @@ public static class DependencyInjection
         services.AddScoped<ITasksServices, TasksServices>();
         services.AddScoped<IUsersServices, UsersServices>();
         services.AddScoped<INotificator, Notificator>();
+        services.AddScoped<IAuthServices, AuthServices>();
+        services.AddScoped<IHashServices, HashServices>();
     }
 
     public static void CreateAutomapper(this IServiceCollection services)
@@ -46,5 +48,4 @@ public static class DependencyInjection
         var services = new ServiceCollection();
         return services.BuildServiceProvider();
     }
-    
 }

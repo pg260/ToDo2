@@ -29,7 +29,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
         filtro.ApplyFilters(ref queryable);
         filtro.ApplyOrdenation(ref queryable);
 
-        var resultado = new PaginatedResult<T>(filtro.Pages, filtro.PerPages, await queryable.CountAsync());
+        var resultado = new PaginatedResult<T>(filtro.Pages, await queryable.CountAsync(), filtro.PerPages);
 
         var quantPages = (double)resultado.Pagination.TotalPages / filtro.PerPages;
         resultado.Pagination.TotalPages = (int)Math.Ceiling(quantPages);

@@ -16,6 +16,7 @@ public class PaginatedResult<T> : IPaginatedResult<T>
         {
             PageNumber = page,
             TotalPages = total,
+            TotalItems = total,
             TotalInPage = perPages
         };
     }

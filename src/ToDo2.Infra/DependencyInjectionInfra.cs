@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ToDo2.Core.Authorization;
+using ToDo2.Core.Extensions;
 using ToDo2.Domain.Contracts.Repositories;
 using ToDo2.Infra.Context;
 using ToDo2.Infra.Repositories;
@@ -11,6 +14,12 @@ public static class DependencyInjectionInfra
 {
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IAuthenticatedUser>(sp =>
+        {
+            var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
+            return httpContextAccessor.UsuarioAutenticado() ? new AuthenticatedUser(httpContextAccessor) : new AuthenticatedUser();
+        });
+        
         services.AddDbContext<BaseDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");

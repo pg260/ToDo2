@@ -10,19 +10,24 @@ namespace ToDo2.Services.Services;
 
 public class UsersServices : BaseService, IUsersServices
 {
-    public UsersServices(IMapper mapper, INotificator notificator, IUsersRepository usersRepository) : base(mapper, notificator)
+    public UsersServices(IMapper mapper, INotificator notificator, IUsersRepository usersRepository, IHashServices hashServices) : base(mapper, notificator)
     {
         _usersRepository = usersRepository;
+        _hashServices = hashServices;
     }
     
     private readonly IUsersRepository _usersRepository;
+    private readonly IHashServices _hashServices;
     
     public async Task<UserDto?> Create(AddUsersDto dto)
     {
         var user = Mapper.Map<Users>(dto);
         if (!await Validate(user)) return null;
         
+        user.Senha = _hashServices.GenerateHash(user.Senha);
+        user.CriadoEm = DateTime.Now;
         _usersRepository.Create(user);
+        
         if (await CommitChanges()) return Mapper.Map<UserDto>(user);
         
         Notificator.Handle("Não foi possível salvar esse usuário.");
@@ -90,8 +95,5 @@ public class UsersServices : BaseService, IUsersServices
         return false;
     }
 
-    private async Task<bool> CommitChanges()
-    {
-        return await _usersRepository.UnitOfWork.Commit();
-    }
+    private async Task<bool> CommitChanges() => await _usersRepository.UnitOfWork.Commit();
 }

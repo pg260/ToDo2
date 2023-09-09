@@ -17,7 +17,7 @@ namespace ToDo2.Infra.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("utf8mb4_0900_ai_ci")
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
@@ -32,13 +32,13 @@ namespace ToDo2.Infra.Migrations
                     b.Property<DateTime>("AtualizadoEm")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("Concluida")
+                    b.Property<bool>("Concluido")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("DataExpiracao")
+                    b.Property<DateTime?>("DataExpiracao")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Descricao")

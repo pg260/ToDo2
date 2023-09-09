@@ -4,7 +4,7 @@ namespace ToDo2.Services.Dtos.PaginatedSearch;
 
 public class PagedDto<T> : IPaginatedResult<T>
 {
-    public PagedDto(IList<T> items, IPagination pagination)
+    public PagedDto()
     {
         Items = new List<T>();
         Pagination = new PaginationDto();

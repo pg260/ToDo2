@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using ToDo2.API.Reponses;
 using ToDo2.Services.Contracts;
@@ -32,6 +33,7 @@ public class UsersController : BaseController
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     [SwaggerOperation(Summary = "Editar um usuário.", Tags = new[] { "Users" })]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(BadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -45,6 +47,7 @@ public class UsersController : BaseController
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     [SwaggerOperation(Summary = "Excluir um usuário.", Tags = new[] { "Users" })]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -57,6 +60,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     [SwaggerOperation(Summary = "Pegar um usuário por id.", Tags = new[] { "Users" })]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -69,6 +73,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     [SwaggerOperation(Summary = "Buscar uma lista de usuários.", Tags = new[] { "Users" })]
     [ProducesResponseType(typeof(PagedDto<UserDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

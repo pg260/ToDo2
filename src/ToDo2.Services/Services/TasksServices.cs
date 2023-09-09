@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ToDo2.Core.Authorization;
 using ToDo2.Domain.Contracts.Repositories;
 using ToDo2.Domain.Entities;
 using ToDo2.Services.Contracts;
@@ -10,18 +11,21 @@ namespace ToDo2.Services.Services;
 
 public class TasksServices : BaseService, ITasksServices
 {
-    public TasksServices(IMapper mapper, INotificator notificator, ITaskRepositories taskRepositories) : base(mapper, notificator)
+    public TasksServices(IMapper mapper, INotificator notificator, ITaskRepositories taskRepositories, IAuthenticatedUser authenticatedUser) : base(mapper, notificator)
     {
         _taskRepositories = taskRepositories;
+        _authenticatedUser = authenticatedUser;
     }
 
     private readonly ITaskRepositories _taskRepositories;
+    private readonly IAuthenticatedUser _authenticatedUser;
 
     public async Task<TasksDto?> Create(AddTasksDto dto)
     {
         var task = Mapper.Map<Tasks>(dto);
         if (!await Validate(task)) return null;
-
+        
+        task = CompletandoTasks(task);
         _taskRepositories.Create(task);
         if (await CommitChanges()) return Mapper.Map<TasksDto>(task);
         
@@ -36,8 +40,15 @@ public class TasksServices : BaseService, ITasksServices
             Notificator.Handle("Os ids não conferem.");
             return null;
         }
-        
-        var task = Mapper.Map<Tasks>(dto);
+
+        var task = await _taskRepositories.GetById(dto.Id);
+        if (task == null || task.UserId != _authenticatedUser.Id)
+        {
+            Notificator.HandleNotFound();
+            return null;
+        }
+
+        Mapper.Map(dto, task);
         if (!await Validate(task)) return null;
 
         _taskRepositories.Update(task);
@@ -50,7 +61,7 @@ public class TasksServices : BaseService, ITasksServices
     public async Task Remove(int id)
     {
         var oldTask = await _taskRepositories.GetById(id);
-        if (oldTask == null)
+        if (oldTask == null || oldTask.UserId != _authenticatedUser.Id)
         {
             Notificator.HandleNotFound();
             return;
@@ -63,7 +74,7 @@ public class TasksServices : BaseService, ITasksServices
     public async Task Concluir(int id)
     {
         var oldTask = await _taskRepositories.GetById(id);
-        if (oldTask == null)
+        if (oldTask == null || oldTask.UserId != _authenticatedUser.Id)
         {
             Notificator.HandleNotFound();
             return;
@@ -77,7 +88,7 @@ public class TasksServices : BaseService, ITasksServices
     public async Task Desconcluir(int id)
     {
         var oldTask = await _taskRepositories.GetById(id);
-        if (oldTask == null)
+        if (oldTask == null || oldTask.UserId != _authenticatedUser.Id)
         {
             Notificator.HandleNotFound();
             return;
@@ -91,7 +102,7 @@ public class TasksServices : BaseService, ITasksServices
     public async Task<TasksDto?> GetById(int id)
     {
         var oldTask = await _taskRepositories.GetById(id);
-        if (oldTask != null) return Mapper.Map<TasksDto>(oldTask);
+        if (oldTask != null && oldTask.UserId == _authenticatedUser.Id) return Mapper.Map<TasksDto>(oldTask);
             
         Notificator.HandleNotFound();
         return null;
@@ -99,6 +110,7 @@ public class TasksServices : BaseService, ITasksServices
 
     public async Task<PagedDto<TasksDto>> Search(BuscarTasksDto dto)
     {
+        dto.UserId = _authenticatedUser.Id;
         var tasks = await _taskRepositories.Search(dto);
         return Mapper.Map<PagedDto<TasksDto>>(tasks);
     }
@@ -111,14 +123,22 @@ public class TasksServices : BaseService, ITasksServices
             return false;
         }
 
-        if (!await _taskRepositories.Any(c => c.Id != tasks.Id && c.Nome == tasks.Nome)) return true;
+        if (!await _taskRepositories.Any(c => c.Id != tasks.Id && c.Nome == tasks.Nome && c.UserId == _authenticatedUser.Id)) return true;
         
         Notificator.Handle("Já existe uma task com esse mesmo nome.");
         return false;
     }
 
-    private async Task<bool> CommitChanges()
+    private async Task<bool> CommitChanges() => await _taskRepositories.UnitOfWork.Commit();
+
+    private Tasks CompletandoTasks(Tasks task, bool criando = true)
     {
-        return await _taskRepositories.UnitOfWork.Commit();
+        task.AtualizadoEm = DateTime.Now;
+        if (!criando) return task;
+        
+        task.UserId = _authenticatedUser.Id;
+        task.Concluido = false;
+        task.CriadoEm = DateTime.Now;
+        return task;
     }
 }

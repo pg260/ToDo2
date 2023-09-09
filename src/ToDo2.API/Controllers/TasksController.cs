@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using ToDo2.API.Reponses;
 using ToDo2.Services.Contracts;
@@ -19,6 +20,7 @@ public class TasksController : BaseController
     private readonly ITasksServices _tasksServices;
 
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(Summary = "Criar uma task.", Tags = new[] { "Tasks" })]
     [ProducesResponseType(typeof(TasksDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(BadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -30,7 +32,8 @@ public class TasksController : BaseController
         return CreatedResponse(string.Empty, task);
     }
     
-[HttpPut("{id}")]
+    [HttpPut("{id}")]
+    [Authorize]
     [SwaggerOperation(Summary = "Editar uma task.", Tags = new[] { "Tasks" })]
     [ProducesResponseType(typeof(TasksDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(BadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -44,6 +47,7 @@ public class TasksController : BaseController
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     [SwaggerOperation(Summary = "Excluir uma task.", Tags = new[] { "Tasks" })]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -56,6 +60,7 @@ public class TasksController : BaseController
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     [SwaggerOperation(Summary = "Pegar uma task por id.", Tags = new[] { "Tasks" })]
     [ProducesResponseType(typeof(TasksDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -68,6 +73,7 @@ public class TasksController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     [SwaggerOperation(Summary = "Buscar uma lista de tasks", Tags = new[] { "Tasks" })]
     [ProducesResponseType(typeof(PagedDto<TasksDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -77,5 +83,4 @@ public class TasksController : BaseController
         var tasks = await _tasksServices.Search(dto);
         return OkResponse(tasks);
     }
-    
 }

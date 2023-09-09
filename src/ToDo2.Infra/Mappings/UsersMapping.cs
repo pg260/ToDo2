@@ -26,11 +26,5 @@ public class UsersMapping : IEntityTypeConfiguration<Users>
 
         builder.Property(c => c.CriadoEm)
             .IsRequired();
-
-        builder.HasMany(c => c.TasksList)
-            .WithOne(t => t.User)
-            .HasForeignKey(t => t.UserId)
-            .HasPrincipalKey(c => c.Id)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

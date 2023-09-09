@@ -8,23 +8,13 @@ namespace ToDo2.Infra.Repositories;
 public class TasksRepository : BaseRepository<Tasks>, ITaskRepositories
 {
     public TasksRepository(BaseDbContext context) : base(context)
-    {
-    }
+    { }
 
-    public void Create(Tasks tasks)
-    {
-        Context.Tasks.Add(tasks);
-    }
+    public void Create(Tasks tasks) => Context.Tasks.Add(tasks);
 
-    public void Update(Tasks tasks)
-    {
-        Context.Tasks.Update(tasks);
-    }
+    public void Update(Tasks tasks) => Context.Tasks.Update(tasks);
 
-    public void Remove(Tasks tasks)
-    {
-        Context.Tasks.Remove(tasks);
-    }
+    public void Remove(Tasks tasks) => Context.Tasks.Remove(tasks);
 
     public async Task<Tasks?> GetById(int id)
     {

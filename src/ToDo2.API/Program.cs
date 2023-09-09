@@ -1,6 +1,11 @@
+using ToDo2.API.Middlewares;
 using ToDo2.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder
+    .Services
+    .ConfigureSwagger();
 
 builder
     .Services
@@ -13,6 +18,10 @@ builder
 builder
     .Services
     .AddSwaggerGen();
+
+builder
+    .Services
+    .AddHttpContextAccessor();
 
 builder
     .Services
@@ -35,6 +44,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
